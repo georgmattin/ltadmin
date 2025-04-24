@@ -1,0 +1,26 @@
+{
+  "deno.enablePaths": [
+    "supabase/functions"
+  ],
+  "deno.lint": true,
+  "deno.unstable": [
+    "bare-node-builtins",
+    "byonm",
+    "sloppy-imports",
+    "unsafe-proto",
+    "webgpu",
+    "broadcast-channel",
+    "worker-options",
+    "cron",
+    "kv",
+    "ffi",
+    "fs",
+    "http",
+    "net"
+  ],
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "appService.defaultWebAppToDeploy": "/subscriptions/2feb3d88-929d-49be-ba76-5cd4097948eb/resourceGroups/appsvc_linux_swedencentral/providers/Microsoft.Web/sites/adminlt2025",
+  "appService.deploySubpath": "."
+}
