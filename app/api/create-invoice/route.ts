@@ -57,7 +57,7 @@ export async function POST(request: Request) {
     
     // Calculate invoice details
     const amount = 20; // Fixed price of 20 EUR
-    const vatRate = 20; // 20% VAT
+    const vatRate = 22; // 22% VAT
     const vatAmount = (amount * vatRate) / 100;
     const subtotal = amount;
     const totalAmount = amount + vatAmount;

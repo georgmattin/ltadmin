@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { FileTextIcon, SearchIcon, SlidersIcon, UsersIcon, CalendarIcon, CalendarRangeIcon } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { TellimusteNimekiri } from "@/components/tellimuste-nimekiri"
+import { KasutajateNimekiri } from "@/components/kasutajate-nimekiri"
 import { StatistikaKaart } from "@/components/statistika-kaart"
 import { Logo } from "@/components/logo"
 import { 
@@ -32,6 +33,8 @@ type PeriodOption = {
   label: string;
 }
 
+type ActiveView = 'tellimused' | 'kasutajad' | 'analuusid' | 'seaded'
+
 export function AdminDashboard() {
   const [statistics, setStatistics] = useState<Statistics | null>(null);
   const [loading, setLoading] = useState(true);
@@ -42,6 +45,7 @@ export function AdminDashboard() {
     to: undefined
   });
   const [showCustomRange, setShowCustomRange] = useState(false);
+  const [activeView, setActiveView] = useState<ActiveView>('tellimused');
 
   const periodOptions: PeriodOption[] = [
     { value: "all", label: "Kõik aeg" },
@@ -107,22 +111,110 @@ export function AdminDashboard() {
     }
   };
 
+  const getViewTitle = () => {
+    switch (activeView) {
+      case 'tellimused':
+        return 'Tellimused';
+      case 'kasutajad':
+        return 'Kasutajad';
+      case 'analuusid':
+        return 'Analüüsid';
+      case 'seaded':
+        return 'Seaded';
+      default:
+        return 'Tellimused';
+    }
+  };
+
+  const renderActiveView = () => {
+    switch (activeView) {
+      case 'tellimused':
+        return (
+          <div>
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold tracking-tight">Tellimused</h2>
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input type="search" placeholder="Otsi tellimusi..." className="pl-8 md:w-[300px]" />
+                </div>
+              </div>
+            </div>
+            <div className="mt-4">
+              <TellimusteNimekiri />
+            </div>
+          </div>
+        );
+      case 'kasutajad':
+        return (
+          <div>
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold tracking-tight">Kasutajad</h2>
+            </div>
+            <div className="mt-4">
+              <KasutajateNimekiri />
+            </div>
+          </div>
+        );
+      case 'analuusid':
+        return (
+          <div>
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold tracking-tight">Analüüsid</h2>
+            </div>
+            <div className="mt-4">
+              <p className="text-muted-foreground">Analüüside haldamise funktsioonid tulekul...</p>
+            </div>
+          </div>
+        );
+      case 'seaded':
+        return (
+          <div>
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold tracking-tight">Seaded</h2>
+            </div>
+            <div className="mt-4">
+              <p className="text-muted-foreground">Süsteemi seadete haldamine tulekul...</p>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-10 border-b bg-background py-5">
         <div className="flex items-center px-4 md:px-6">
           <Logo />
           <nav className="ml-auto flex gap-4 sm:gap-6">
-            <Button variant="ghost" className="text-sm font-medium">
+            <Button 
+              variant={activeView === 'tellimused' ? "default" : "ghost"} 
+              className="text-sm font-medium"
+              onClick={() => setActiveView('tellimused')}
+            >
               Tellimused
             </Button>
-            <Button variant="ghost" className="text-sm font-medium">
+            <Button 
+              variant={activeView === 'kasutajad' ? "default" : "ghost"} 
+              className="text-sm font-medium"
+              onClick={() => setActiveView('kasutajad')}
+            >
               Kasutajad
             </Button>
-            <Button variant="ghost" className="text-sm font-medium">
+            <Button 
+              variant={activeView === 'analuusid' ? "default" : "ghost"} 
+              className="text-sm font-medium"
+              onClick={() => setActiveView('analuusid')}
+            >
               Analüüsid
             </Button>
-            <Button variant="ghost" className="text-sm font-medium">
+            <Button 
+              variant={activeView === 'seaded' ? "default" : "ghost"} 
+              className="text-sm font-medium"
+              onClick={() => setActiveView('seaded')}
+            >
               Seaded
             </Button>
           </nav>
@@ -146,7 +238,7 @@ export function AdminDashboard() {
               </SelectContent>
             </Select>
 
-            {selectedPeriod === 'custom' && (
+            {selectedPeriod === 'custom' &&
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -180,7 +272,7 @@ export function AdminDashboard() {
                   />
                 </PopoverContent>
               </Popover>
-            )}
+            }
           </div>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -210,18 +302,7 @@ export function AdminDashboard() {
           />
         </div>
         <div className="mt-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold tracking-tight">Tellimused</h2>
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input type="search" placeholder="Otsi tellimusi..." className="pl-8 md:w-[300px]" />
-              </div>
-            </div>
-          </div>
-          <div className="mt-4">
-            <TellimusteNimekiri />
-          </div>
+          {renderActiveView()}
         </div>
       </main>
     </div>
