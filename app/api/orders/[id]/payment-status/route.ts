@@ -8,10 +8,10 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export async function PATCH(
   request: Request,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const id = context.params.id;
+    const id = params.id;
     if (!id) {
       return NextResponse.json(
         { error: 'Order ID is required' },

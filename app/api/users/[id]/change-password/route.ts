@@ -8,10 +8,10 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export async function PATCH(
   request: Request,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id: userId } = await context.params;
+    const { id: userId } = await params;
     if (!userId) {
       return NextResponse.json(
         { error: 'User ID is required' },
